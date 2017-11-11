@@ -14,9 +14,7 @@ public class TagTests {
     public void testSimpleTag() throws Exception {
         TagNode priceTag = new TagNode("price");
 
-        String expected =
-                "<price>" +
-                "</price>";
+        String expected = "<price/>";
 
         assertThat(priceTag.toString(), is(equalTo(expected)));
     }
@@ -58,8 +56,7 @@ public class TagTests {
 
         String expected =
                 "<product>" +
-                        "<price>" +
-                        "</price>" +
+                        "<price/>" +
                 "</product>";
 
         assertThat(productTag.toString(), is(equalTo(expected)));
@@ -76,8 +73,7 @@ public class TagTests {
         String expected =
                 "<orders>" +
                         "<order>" +
-                        "<product>" +
-                        "</product>" +
+                        "<product/>" +
                         "</order>" +
                         "</orders>";
 

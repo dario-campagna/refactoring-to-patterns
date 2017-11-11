@@ -35,15 +35,24 @@ public class TagNode {
     @Override
     public String toString() {
         String result;
-        result = "<" + name + attributes + ">";
-        Iterator<TagNode> iterator = children().iterator();
-        while (iterator.hasNext()) {
-            TagNode node = iterator.next();
-            result += node.toString();
+        result = "<" + name + attributes;
+        if (emptyTag()) {
+            result += "/>";
+        } else {
+            result += ">";
+            Iterator<TagNode> iterator = children().iterator();
+            while (iterator.hasNext()) {
+                TagNode node = iterator.next();
+                result += node.toString();
+            }
+            result += value;
+            result += "</" + name + ">";
         }
-        result += value;
-        result += "</" + name + ">";
         return result;
+    }
+
+    private boolean emptyTag() {
+        return value.isEmpty() && children().isEmpty();
     }
 
     private List<TagNode> children() {
