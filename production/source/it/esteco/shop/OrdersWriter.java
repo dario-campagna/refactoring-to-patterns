@@ -31,41 +31,34 @@ public class OrdersWriter {
     private void writeProductsTo(StringBuffer xml, Order order) {
         for (int j = 0; j < order.getProductCount(); j++) {
             Product product = order.getProduct(j);
-            xml.append("<product");
-            xml.append(" id='");
-            xml.append(product.getID());
-            xml.append("'");
-            xml.append(" color='");
-            xml.append(getColorFor(product));
-            xml.append("'");
+            TagNode productTag = new TagNode("product");
+            productTag.addAttribute("id", product.getID());
+            productTag.addAttribute("color", colorFor(product));
             if (product.getSize() != ProductSize.NOT_APPLICABLE) {
-                xml.append(" size='");
-                xml.append(getSizeFor(product));
-                xml.append("'");
+                productTag.addAttribute("size", sizeFor(product));
             }
-            xml.append(">");
-            writePriceTo(xml, product);
-            xml.append(product.getName());
-            xml.append("</product>");
+            writePriceTo(productTag, product);
+            productTag.addValue(product.getName());
+            xml.append(productTag.toString());
         }
     }
 
-    private void writePriceTo(StringBuffer xml, Product product) {
+    private void writePriceTo(TagNode productNode, Product product) {
         TagNode priceTag = new TagNode("price");
         priceTag.addAttribute("currency", currencyFor(product));
         priceTag.addValue(product.getPrice());
-        xml.append(priceTag.toString());
+        productNode.add(priceTag);
     }
 
     private String currencyFor(Product product) {
         return product.getCurrency().toString();
     }
 
-    private String getSizeFor(Product product) {
+    private String sizeFor(Product product) {
         return product.getSize().toString();
     }
 
-    private String getColorFor(Product product) {
+    private String colorFor(Product product) {
         return product.getColor().toString();
     }
 }
