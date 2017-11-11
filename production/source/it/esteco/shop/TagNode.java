@@ -1,10 +1,15 @@
 package it.esteco.shop;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 public class TagNode {
 
     private String name = "";
     private String value = "";
     private StringBuffer attributes;
+    private List<TagNode> children;
 
     public TagNode(String name) {
         this.name = name;
@@ -23,13 +28,28 @@ public class TagNode {
         this.value = value;
     }
 
+    public void add(TagNode child) {
+        children().add(child);
+    }
+
     @Override
     public String toString() {
         String result;
-        result =
-            "<" + name + attributes + ">" +
-                value +
-            "</" + name + ">";
+        result = "<" + name + attributes + ">";
+        Iterator<TagNode> iterator = children().iterator();
+        while (iterator.hasNext()) {
+            TagNode node = iterator.next();
+            result += node.toString();
+        }
+        result += value;
+        result += "</" + name + ">";
         return result;
+    }
+
+    private List<TagNode> children() {
+        if (children == null) {
+            children = new ArrayList<TagNode>();
+        }
+        return children;
     }
 }
