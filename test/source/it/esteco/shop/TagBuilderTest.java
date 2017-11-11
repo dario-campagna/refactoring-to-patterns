@@ -104,4 +104,31 @@ public class TagBuilderTest {
             assertThat(runtimeException.getMessage(), is(equalTo(expectedErrorMessage)));
         }
     }
+
+    @Test
+    public void testAttributesAndValues() throws Exception {
+        String expectedXml =
+            "<flavor name='Test-Driven Development'>" +
+                "<requirements>" +
+                    "<requirement type='hardware'>" +
+                        "1 computer for every 2 participants" +
+                    "</requirement>" +
+                    "<requirement type='software'>" +
+                        "IDE" +
+                    "</requirement>" +
+                "</requirements>" +
+            "</flavor>";
+
+        TagBuilder builder = new TagBuilder("flavor");
+        builder.addAttribute("name", "Test-Driven Development");
+        builder.addChild("requirements");
+        builder.addToParent("requirements", "requirement");
+        builder.addAttribute("type", "hardware");
+        builder.addValue("1 computer for every 2 participants");
+        builder.addToParent("requirements", "requirement");
+        builder.addAttribute("type", "software");
+        builder.addValue("IDE");
+
+        assertThat(builder.toXml(), is(equalTo(expectedXml)));
+    }
 }

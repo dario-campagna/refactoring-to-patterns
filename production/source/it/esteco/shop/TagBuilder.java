@@ -30,6 +30,14 @@ public class TagBuilder {
         addTo(parentNode, childTagName);
     }
 
+    public void addAttribute(String attribute, String value) {
+        currentNode.addAttribute(attribute, value);
+    }
+
+    public void addValue(String value) {
+        currentNode.addValue(value);
+    }
+
     private void addTo(TagNode parentNode, String tagName) {
         currentNode = new TagNode(tagName);
         parentNode.add(currentNode);
