@@ -9,43 +9,38 @@ public class OrdersWriter {
     }
 
     public String getContents() {
-        StringBuffer xml = new StringBuffer();
-        writeOrderTo(xml);
-        return xml.toString();
+        TagBuilder tagBuilder = new TagBuilder("orders");
+        writeOrderTo(tagBuilder);
+        return tagBuilder.toXml();
     }
 
-    private void writeOrderTo(StringBuffer xml) {
-        TagNode ordersNode = new TagNode("orders");
+    private void writeOrderTo(TagBuilder tagBuilder) {
         for (int i = 0; i < orders.getOrderCount(); i++) {
             Order order = orders.getOrder(i);
-            TagNode orderNode = new TagNode("order");
-            orderNode.addAttribute("id", order.getOrderId());
-            writeProductsTo(orderNode, order);
-            ordersNode.add(orderNode);
+            tagBuilder.addToParent("orders", "order");
+            tagBuilder.addAttribute("id", order.getOrderId());
+            writeProductsTo(tagBuilder, order);
         }
-        xml.append(ordersNode.toString());
     }
 
-    private void writeProductsTo(TagNode orderNode, Order order) {
+    private void writeProductsTo(TagBuilder tagBuilder, Order order) {
         for (int j = 0; j < order.getProductCount(); j++) {
             Product product = order.getProduct(j);
-            TagNode productTag = new TagNode("product");
-            productTag.addAttribute("id", product.getID());
-            productTag.addAttribute("color", colorFor(product));
+            tagBuilder.addToParent("order", "product");
+            tagBuilder.addAttribute("id", product.getID());
+            tagBuilder.addAttribute("color", colorFor(product));
             if (product.getSize() != ProductSize.NOT_APPLICABLE) {
-                productTag.addAttribute("size", sizeFor(product));
+                tagBuilder.addAttribute("size", sizeFor(product));
             }
-            writePriceTo(productTag, product);
-            productTag.addValue(product.getName());
-            orderNode.add(productTag);
+            tagBuilder.addValue(product.getName());
+            writePriceTo(tagBuilder, product);
         }
     }
 
-    private void writePriceTo(TagNode productNode, Product product) {
-        TagNode priceTag = new TagNode("price");
-        priceTag.addAttribute("currency", currencyFor(product));
-        priceTag.addValue(product.getPrice());
-        productNode.add(priceTag);
+    private void writePriceTo(TagBuilder tagBuilder, Product product) {
+        tagBuilder.addChild("price");
+        tagBuilder.addAttribute("currency", currencyFor(product));
+        tagBuilder.addValue(product.getPrice());
     }
 
     private String currencyFor(Product product) {
