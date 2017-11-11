@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 public class TagTests {
@@ -102,5 +103,18 @@ public class TagTests {
                         "</order>";
 
         assertThat(orderTag.toString(), is(equalTo(expected)));
+    }
+
+    @Test
+    public void testParents() throws Exception {
+        TagNode rootNode = new TagNode("root");
+
+        assertNull(rootNode.getParent());
+
+        TagNode childNode = new TagNode("child");
+        rootNode.add(childNode);
+
+        assertThat(childNode.getParent(), is(equalTo(rootNode)));
+        assertThat(childNode.getParent().getName(), is(equalTo("root")));
     }
 }

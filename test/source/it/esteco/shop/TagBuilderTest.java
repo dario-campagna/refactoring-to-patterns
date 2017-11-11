@@ -20,13 +20,12 @@ public class TagBuilderTest {
         String expectedXml =
                 "<flavors>" +
                         "<flavor/>" +
-                 "</flavors>";
+                        "</flavors>";
 
         TagBuilder builder = new TagBuilder("flavors");
         builder.addChild("flavor");
-        String actualXml = builder.toXml();
 
-        assertThat(actualXml, is(equalTo(expectedXml)));
+        assertThat(builder.toXml(), is(equalTo(expectedXml)));
     }
 
     @Test
@@ -34,18 +33,32 @@ public class TagBuilderTest {
         String expectedXml =
                 "<flavors>" +
                         "<flavor>" +
-                            "<requirements>" +
-                                "<requirement/>" +
-                            "</requirements>" +
+                        "<requirements>" +
+                        "<requirement/>" +
+                        "</requirements>" +
                         "</flavor>" +
-                 "</flavors>";
+                        "</flavors>";
 
         TagBuilder builder = new TagBuilder("flavors");
         builder.addChild("flavor");
         builder.addChild("requirements");
         builder.addChild("requirement");
-        String actualXml = builder.toXml();
 
-        assertThat(actualXml, is(equalTo(expectedXml)));
+        assertThat(builder.toXml(), is(equalTo(expectedXml)));
+    }
+
+    @Test
+    public void testBuildSibling() throws Exception {
+        String expectedXml =
+                "<flavors>" +
+                        "<flavor1/>" +
+                        "<flavor2/>" +
+                        "</flavors>";
+
+        TagBuilder builder = new TagBuilder("flavors");
+        builder.addChild("flavor1");
+        builder.addSibling("flavor2");
+
+        assertThat(builder.toXml(), is(equalTo(expectedXml)));
     }
 }
